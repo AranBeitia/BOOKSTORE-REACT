@@ -7,8 +7,14 @@ const getAll = async () => {
 	return res.data
 }
 
+const create = async (book) => {
+	const res = await axios.post(API_URL + '/books', book)
+	return res.data
+}
+
 const booksService = {
 	getAll,
+	create,
 }
 
 export default booksService

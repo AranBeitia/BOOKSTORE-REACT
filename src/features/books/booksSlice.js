@@ -13,14 +13,26 @@ export const getAll = createAsyncThunk('books/getAll', async () => {
 	}
 })
 
+export const create = createAsyncThunk('books/create', async (book) => {
+	try {
+		return await booksService.create(book)
+	} catch (error) {
+		console.error(error)
+	}
+})
+
 export const booksSlice = createSlice({
 	name: 'books',
 	initialState,
 	reducers: {},
 	extraReducers: (builder) => {
-		builder.addCase(getAll.fulfilled, (state, action) => {
-			state.books = action.payload
-		})
+		builder
+			.addCase(getAll.fulfilled, (state, action) => {
+				state.books = action.payload
+			})
+			.addCase(create.fulfilled, (state, action) => {
+				state.books = [...state.books, action.payload]
+			})
 	},
 })
 
