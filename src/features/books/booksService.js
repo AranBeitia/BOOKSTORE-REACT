@@ -12,9 +12,15 @@ const create = async (book) => {
 	return res.data
 }
 
+const deleteBook = async (id) => {
+	const res = await axios.delete(API_URL + '/books/' + id)
+	return res.data
+}
+
 const booksService = {
 	getAll,
 	create,
+	deleteBook,
 }
 
 export default booksService

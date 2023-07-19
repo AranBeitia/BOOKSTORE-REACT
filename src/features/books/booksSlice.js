@@ -21,6 +21,14 @@ export const create = createAsyncThunk('books/create', async (book) => {
 	}
 })
 
+export const deleteBook = createAsyncThunk('books/deleteBook', async (id) => {
+	try {
+		return await booksService.deleteBook(id)
+	} catch (error) {
+		console.error(error)
+	}
+})
+
 export const booksSlice = createSlice({
 	name: 'books',
 	initialState,
@@ -32,6 +40,11 @@ export const booksSlice = createSlice({
 			})
 			.addCase(create.fulfilled, (state, action) => {
 				state.books = [...state.books, action.payload]
+			})
+			.addCase(deleteBook.fulfilled, (state, action) => {
+				state.books = state.books.filter(
+					(book) => book.id !== +action.payload.id
+				)
 			})
 	},
 })
