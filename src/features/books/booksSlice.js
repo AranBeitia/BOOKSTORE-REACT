@@ -3,6 +3,7 @@ import booksService from './booksService'
 
 const initialState = {
 	books: [],
+	book: {},
 }
 
 export const getAll = createAsyncThunk('books/getAll', async () => {
@@ -29,6 +30,22 @@ export const deleteBook = createAsyncThunk('books/deleteBook', async (id) => {
 	}
 })
 
+export const getById = createAsyncThunk('books/getById', async (id) => {
+	try {
+		return await booksService.getById(id)
+	} catch (error) {
+		console.error(error)
+	}
+})
+
+export const update = createAsyncThunk('books/update', async (book) => {
+	try {
+		return await booksService.update(book)
+	} catch (error) {
+		console.error(error)
+	}
+})
+
 export const booksSlice = createSlice({
 	name: 'books',
 	initialState,
@@ -45,6 +62,18 @@ export const booksSlice = createSlice({
 				state.books = state.books.filter(
 					(book) => book.id !== +action.payload.id
 				)
+			})
+			.addCase(getById.fulfilled, (state, action) => {
+				state.book = action.payload
+			})
+			.addCase(update.fulfilled, (state, action) => {
+				const books = state.books.map((book) => {
+					if (book.id === action.payload.id) {
+						book = action.payload
+					}
+					return book
+				})
+				state.books = books
 			})
 	},
 })
